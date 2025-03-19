@@ -36,7 +36,23 @@ const login = (req, res, next) => {
   })(req, res, next);
 };
 
+const logout = (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
+    res.status(200);
+    res.redirect('/');
+  });
+};
+
 module.exports = {
   register,
   login,
+  logout,
 };
