@@ -1,8 +1,13 @@
-const express = require("express");
+const express = require('express');
 const commentRouter = express.Router();
+const commentController = require('../controllers/commentController');
 
-commentRouter.get("/", (req, res) => {
-  res.send("THIS IS THE GET COMMENT PAGE");
-});
+commentRouter.get('/', commentController.getAllComments);
+
+commentRouter.post(
+  '/:postId/comments',
+  commentController.verifyToken,
+  commentController.createComment
+);
 
 module.exports = commentRouter;

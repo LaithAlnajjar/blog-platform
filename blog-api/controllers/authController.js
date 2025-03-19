@@ -29,7 +29,7 @@ const login = (req, res, next) => {
 
     // Create JWT token
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
+      expiresIn: '7d',
     });
 
     return res.json({ success: true, token });

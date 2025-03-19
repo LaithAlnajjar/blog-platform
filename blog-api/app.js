@@ -32,7 +32,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/posts', require('./routes/postRoutes'));
-app.use('/comments', require('./routes/commentRoutes'));
+app.use('/posts', require('./routes/commentRoutes'));
 app.use(require('./routes/authRoutes'));
 
 app.get('/', (req, res) => {

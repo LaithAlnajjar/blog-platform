@@ -18,7 +18,6 @@ const createPost = async (req, res, next) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      console.log(authData);
       try {
         post = await prisma.post.create({
           data: {

@@ -20,7 +20,6 @@ const verify = async (username, password, done) => {
 
   //if the username exists comapres the entered password with the hashed password in the database
   const isValid = await bcrypt.compare(password, user.password);
-  console.log(isValid);
   if (isValid) {
     return done(null, user);
   } else {
