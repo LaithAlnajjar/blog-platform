@@ -1,6 +1,23 @@
 const { PrismaClient } = require('@prisma/client');
 const jwt = require('jsonwebtoken');
 const prisma = new PrismaClient();
+const { body, validationResult } = require('express-validator');
+
+const validatePost = [
+  body('title')
+    .trim()
+    .notEmpty()
+    .withMessage('Title is required')
+    .isLength({ min: 3 })
+    .withMessage('Title must be at least 3 characters long'),
+
+  body('content')
+    .trim()
+    .notEmpty()
+    .withMessage('Content is required')
+    .isLength({ min: 10 })
+    .withMessage('Content must be at least 10 characters long'),
+];
 
 const getAllPosts = async (req, res, next) => {
   try {
@@ -11,26 +28,34 @@ const getAllPosts = async (req, res, next) => {
   }
 };
 
-const createPost = async (req, res, next) => {
-  jwt.verify(req.token, process.env.JWT_SECRET, async (err, authData) => {
-    if (err || authData.admin !== true) {
-      res.sendStatus(403);
-    } else {
-      try {
-        post = await prisma.post.create({
-          data: {
-            title: req.body.title,
-            content: req.body.content,
-            authorId: authData.id,
-          },
-        });
-        res.json(post);
-      } catch (error) {
-        return next(error);
+const createPost = [
+  validatePost,
+  async (req, res, next) => {
+    jwt.verify(req.token, process.env.JWT_SECRET, async (err, authData) => {
+      if (err || authData.admin !== true) {
+        res.sendStatus(403);
+      } else {
+        try {
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+          }
+
+          post = await prisma.post.create({
+            data: {
+              title: req.body.title,
+              content: req.body.content,
+              authorId: authData.id,
+            },
+          });
+          res.json(post);
+        } catch (error) {
+          return next(error);
+        }
       }
-    }
-  });
-};
+    });
+  },
+];
 
 const getPostById = async (req, res, next) => {
   try {
