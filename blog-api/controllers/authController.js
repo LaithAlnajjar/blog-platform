@@ -4,23 +4,52 @@ const prisma = new PrismaClient();
 const User = prisma.user;
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const { body, validationResult } = require('express-validator');
 
-const register = async (req, res, next) => {
-  const hash = await generatePassword(req.body.password); //generates password with salt in the database
-  try {
-    //stores user inside database
-    const user = await User.create({
-      data: {
-        username: req.body.username,
-        password: hash,
-      },
-    });
-  } catch (error) {
-    return next(error);
-  }
+//function which validates the username and password upon registering
+const validateUser = [
+  body('username')
+    .trim()
+    .notEmpty()
+    .withMessage('Username is required')
+    .isAlphanumeric()
+    .withMessage('Username must contain only letters and numbers')
+    .isLength({ min: 3 })
+    .withMessage('Username must be at least 3 characters long'),
 
-  res.redirect('/login');
-};
+  body('password')
+    .trim()
+    .notEmpty()
+    .withMessage('Password is required')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long')
+    .matches(/\d/)
+    .withMessage('Password must contain at least one number'),
+];
+
+const register = [
+  validateUser,
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(422).json({ errors: errors.array() });
+    }
+    const hash = await generatePassword(req.body.password); //generates password with salt in the database
+    try {
+      //stores user inside database
+      const user = await User.create({
+        data: {
+          username: req.body.username,
+          password: hash,
+        },
+      });
+    } catch (error) {
+      return next(error);
+    }
+
+    res.redirect('/login');
+  },
+];
 
 const login = (req, res, next) => {
   passport.authenticate('local', { session: true }, (err, user, info) => {

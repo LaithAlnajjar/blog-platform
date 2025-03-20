@@ -22,7 +22,7 @@ const createComment = async (req, res, next) => {
       try {
         const comment = await Comments.create({
           data: {
-            content: 'comment',
+            content: req.body.content,
             postId: parseInt(req.params.postId),
             userId: authData.id,
           },

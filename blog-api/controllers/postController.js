@@ -21,8 +21,8 @@ const createPost = async (req, res, next) => {
       try {
         post = await prisma.post.create({
           data: {
-            title: 'titleTest',
-            content: 'thisisthecontent',
+            title: req.body.title,
+            content: req.body.content,
             authorId: authData.id,
           },
         });
