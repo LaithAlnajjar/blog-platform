@@ -35,6 +35,34 @@ const createComment = async (req, res, next) => {
   });
 };
 
+const deleteComment = async (req, res, next) => {
+  jwt.verify(req.token, process.env.JWT_SECRET, async (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      try {
+        const comment = await prisma.comment.findUnique({
+          where: {
+            id: parseInt(req.params.commentId),
+          },
+        });
+        if (comment.userId === authData.id) {
+          const deleteComment = await prisma.comment.delete({
+            where: {
+              id: parseInt(comment.id),
+            },
+          });
+          res.json(comment);
+        } else {
+          res.sendStatus(403);
+        }
+      } catch (error) {
+        return next(error);
+      }
+    }
+  });
+};
+
 const verifyToken = (req, res, next) => {
   const bearerHeader = req.headers['authorization'];
   if (typeof bearerHeader !== 'undefined') {
@@ -46,4 +74,4 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-module.exports = { getAllComments, createComment, verifyToken };
+module.exports = { getAllComments, createComment, deleteComment, verifyToken };
