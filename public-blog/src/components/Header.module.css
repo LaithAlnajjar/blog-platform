@@ -1,0 +1,48 @@
+.header {
+  composes: primaryBg from './colors.module.css';
+  width: 100%;
+  min-height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 50px;
+  border-top: 2px solid #004d40;
+  border-bottom: 2px solid #004d40;
+}
+
+.blog-name {
+  composes: primaryText from './colors.module.css';
+  composes: primaryFont from './fonts.module.css';
+  font-size: 2.5rem;
+  font-weight: 1000;
+}
+
+.nav-list {
+  composes: primaryText from './colors.module.css';
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  font-size: 1.2rem;
+}
+
+.auth-list {
+  composes: primaryText from './colors.module.css';
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  list-style: none;
+  font-size: 1.2rem;
+}
+
+.link {
+  font-weight: 600;
+  composes: primaryText from './colors.module.css';
+  text-decoration: none;
+}
+
+.auth-list > li > .link {
+  padding: 10px 20px;
+  border: 2px solid #004d40;
+}
