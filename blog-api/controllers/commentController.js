@@ -4,6 +4,28 @@ const { body, validationResult } = require('express-validator');
 
 const prisma = new PrismaClient();
 
+//Middleware to verify the jwt token
+const verifyToken = (req, res, next) => {
+  const bearerHeader = req.headers['authorization'];
+  if (!bearerHeader) {
+    return res.status(403).json({
+      success: false,
+      message: 'No authorization header',
+    });
+  }
+
+  const [bearer, token] = bearerHeader.split(' ');
+  if (bearer !== 'Bearer' || !token) {
+    return res.status(403).json({
+      success: false,
+      message: 'Invalid authorization format',
+    });
+  }
+
+  req.token = token;
+  next();
+};
+
 const validateComment = [
   body('content')
     .trim()
@@ -90,27 +112,5 @@ const deleteComment = [
     }
   },
 ];
-
-//Middleware to verify the jwt token
-const verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers['authorization'];
-  if (!bearerHeader) {
-    return res.status(403).json({
-      success: false,
-      message: 'No authorization header',
-    });
-  }
-
-  const [bearer, token] = bearerHeader.split(' ');
-  if (bearer !== 'Bearer' || !token) {
-    return res.status(403).json({
-      success: false,
-      message: 'Invalid authorization format',
-    });
-  }
-
-  req.token = token;
-  next();
-};
 
 module.exports = { getAllComments, createComment, deleteComment, verifyToken };

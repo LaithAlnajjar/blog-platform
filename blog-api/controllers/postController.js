@@ -20,6 +20,28 @@ const validatePost = [
     .withMessage('Content must be at least 10 characters long'),
 ];
 
+//Middleware to verify the jwt token
+const verifyToken = (req, res, next) => {
+  const bearerHeader = req.headers['authorization'];
+  if (!bearerHeader) {
+    return res.status(403).json({
+      success: false,
+      message: 'No authorization header',
+    });
+  }
+
+  const [bearer, token] = bearerHeader.split(' ');
+  if (bearer !== 'Bearer' || !token) {
+    return res.status(403).json({
+      success: false,
+      message: 'Invalid authorization format',
+    });
+  }
+
+  req.token = token;
+  next();
+};
+
 //Middleware to verify if the user is an admin
 const verifyAdmin = async (req, res, next) => {
   try {
@@ -176,28 +198,6 @@ const deletePost = [
     }
   },
 ];
-
-//Middleware to verify the jwt token
-const verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers['authorization'];
-  if (!bearerHeader) {
-    return res.status(403).json({
-      success: false,
-      message: 'No authorization header',
-    });
-  }
-
-  const [bearer, token] = bearerHeader.split(' ');
-  if (bearer !== 'Bearer' || !token) {
-    return res.status(403).json({
-      success: false,
-      message: 'Invalid authorization format',
-    });
-  }
-
-  req.token = token;
-  next();
-};
 
 module.exports = {
   createPost,

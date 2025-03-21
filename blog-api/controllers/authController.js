@@ -108,7 +108,7 @@ const login = async (req, res, next) => {
 
     return res.json({
       success: true,
-      data: { token },
+      data: { user, token },
     });
   })(req, res, next);
 };
