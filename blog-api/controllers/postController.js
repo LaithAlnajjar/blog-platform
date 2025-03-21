@@ -50,7 +50,10 @@ const createPost = [
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({
+          success: false,
+          errors: errors.array(),
+        });
       }
 
       const { title, content } = req.body;
@@ -108,6 +111,14 @@ const updatePost = [
         });
       }
 
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          errors: errors.array(),
+        });
+      }
+
       const updatedPost = await prisma.post.update({
         where: { id: postId },
         data: {
@@ -119,12 +130,6 @@ const updatePost = [
 
       res.json({ success: true, data: updatedPost });
     } catch (error) {
-      if (error instanceof jwt.JsonWebTokenError) {
-        return res.status(403).json({
-          success: false,
-          message: 'Invalid token',
-        });
-      }
       next(error);
     }
   },
