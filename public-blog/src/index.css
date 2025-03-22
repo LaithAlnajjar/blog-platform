@@ -1,3 +1,5 @@
+@import './styles/colors.module.css';
+
 /* 1. Use a more-intuitive box-sizing model */
 *,
 *::before,
@@ -61,5 +63,7 @@ h6 {
 }
 
 body {
-  background-color: #f5f5dc;
+  background-color: var(--primary-bg);
+  display: grid;
+  place-content: center;
 }

@@ -1,6 +1,8 @@
+@import '../styles/colors.module.css';
+
 .header {
-  composes: primaryBg from './colors.module.css';
-  width: 100%;
+  background-color: var(--primary-bg);
+  min-width: 100vw;
   min-height: 10vh;
   display: flex;
   justify-content: space-between;
@@ -11,14 +13,11 @@
 }
 
 .blog-name {
-  composes: primaryText from './colors.module.css';
-  composes: primaryFont from './fonts.module.css';
   font-size: 2.5rem;
   font-weight: 1000;
 }
 
 .nav-list {
-  composes: primaryText from './colors.module.css';
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,8 +25,13 @@
   font-size: 1.2rem;
 }
 
+.nav-list > li > a:visited {
+  color: black;
+  font-weight: 600;
+  text-decoration: none;
+}
+
 .auth-list {
-  composes: primaryText from './colors.module.css';
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -38,11 +42,11 @@
 
 .link {
   font-weight: 600;
-  composes: primaryText from './colors.module.css';
   text-decoration: none;
 }
 
-.auth-list > li > .link {
+.auth-list > li > .link:visited {
+  color: black;
   padding: 10px 20px;
   border: 2px solid #004d40;
 }
