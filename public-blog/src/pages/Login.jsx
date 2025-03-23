@@ -18,11 +18,16 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      auth.login(input);
-      navigate('/');
+      const res = await auth.login(input);
+      if (res) {
+        console.log('Login successful');
+        navigate('/');
+      } else {
+        console.log('Login failed');
+      }
     } catch (error) {
       console.error(error);
     }
