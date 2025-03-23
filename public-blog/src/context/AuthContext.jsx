@@ -17,6 +17,22 @@ const AuthProvider = ({ children }) => {
     }
   }, [storedUser, storedToken]);
 
+  const register = async (data) => {
+    try {
+      const { username, password } = data;
+      const response = await axios.post('http://localhost:3000/register', {
+        username,
+        password,
+      });
+      if (response.data.success) {
+        return;
+      }
+      throw new Error(response.message);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const login = async (data) => {
     try {
       const { username, password } = data;
@@ -45,7 +61,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, register, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

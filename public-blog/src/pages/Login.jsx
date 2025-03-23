@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import styles from './Login.module.css';
 
@@ -7,7 +8,7 @@ function Login() {
     username: '',
     password: '',
   });
-
+  const navigate = useNavigate();
   const auth = useAuth();
 
   const handleChange = (e) => {
@@ -21,6 +22,7 @@ function Login() {
     try {
       e.preventDefault();
       auth.login(input);
+      navigate('/');
     } catch (error) {
       console.error(error);
     }
