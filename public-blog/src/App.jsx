@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Post from './pages/Post';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import '../styles/globals.css';
 
 function App() {
   return (

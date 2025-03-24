@@ -1,0 +1,14 @@
+:root {
+  --primary-bg: #faf9f6;
+  --secondary-bg: #f4f4f4;
+  --primary-text: #333;
+  --accent: #a1c4fd;
+  --font-heading: 'Inter', sans-serif;
+  --font-body: 'Source Serif Pro', serif;
+}
+
+body {
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  font-family: var(--font-body);
+}

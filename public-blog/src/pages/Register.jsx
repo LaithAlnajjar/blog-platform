@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import styles from './Register.module.css';
 
 function Register() {
   const [input, setInput] = useState({
@@ -32,9 +31,8 @@ function Register() {
       action="http://localhost:3000/register"
       method="POST"
       onSubmit={handleSubmit}
-      className={styles['form']}
     >
-      <h2 className={styles['title']}>Register</h2>
+      <h2>Register</h2>
       <label htmlFor="username">
         Username
         <input
@@ -42,7 +40,6 @@ function Register() {
           id="username"
           name="username"
           onChange={handleChange}
-          className={styles['username'] + ' ' + styles['input']}
         />
       </label>
       <label htmlFor="password">
@@ -52,12 +49,9 @@ function Register() {
           id="password"
           name="password"
           onChange={handleChange}
-          className={styles['password'] + ' ' + styles['input']}
         />
       </label>
-      <button type="submit" className={styles['button']}>
-        Register
-      </button>
+      <button type="submit">Register</button>
     </form>
   );
 }

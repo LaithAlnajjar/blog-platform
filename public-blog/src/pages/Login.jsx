@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import styles from './Login.module.css';
 
 function Login() {
   const [input, setInput] = useState({
@@ -37,9 +36,8 @@ function Login() {
       action="http://localhost:3000/login"
       method="POST"
       onSubmit={handleSubmit}
-      className={styles['form']}
     >
-      <h2 className={styles['title']}>Login</h2>
+      <h2>Login</h2>
       <label htmlFor="username">
         Username
         <input
@@ -47,7 +45,6 @@ function Login() {
           id="username"
           name="username"
           onChange={handleChange}
-          className={styles['username'] + ' ' + styles['input']}
         />
       </label>
       <label htmlFor="password">
@@ -57,12 +54,9 @@ function Login() {
           id="password"
           name="password"
           onChange={handleChange}
-          className={styles['password'] + ' ' + styles['input']}
         />
       </label>
-      <button type="submit" className={styles['button']}>
-        Login
-      </button>
+      <button type="submit">Login</button>
     </form>
   );
 }
