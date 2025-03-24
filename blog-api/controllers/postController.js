@@ -95,8 +95,9 @@ const createPost = [
 
 const getPostById = async (req, res, next) => {
   try {
+    let id = parseInt(req.params.postId);
     const post = await prisma.post.findUnique({
-      where: { id: req.params.postId },
+      where: { id },
     });
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });

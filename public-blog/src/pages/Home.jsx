@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PostCard from '../components/PostCard';
 
@@ -9,14 +10,15 @@ function Home() {
     const getPosts = async () => {
       const response = await axios.get('http://localhost:3000/posts');
       setPosts(response.data.data);
-      console.log(response.data.data);
     };
     getPosts();
   }, []);
   return (
     <div>
       {posts.map((post) => (
-        <PostCard key={post.id} title={post.title} content={post.content} />
+        <Link to={`/posts/${post.id}`} key={post.id}>
+          <PostCard key={post.id} title={post.title} content={post.content} />
+        </Link>
       ))}
     </div>
   );
