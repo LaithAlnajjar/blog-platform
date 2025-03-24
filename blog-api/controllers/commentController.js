@@ -68,6 +68,7 @@ const createComment = [
           postId: parseInt(req.params.postId),
           userId: authData.id,
         },
+        include: { user: { select: { username: true } } },
       });
 
       res.json({ success: true, data: comment });

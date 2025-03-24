@@ -4,13 +4,15 @@ import styles from './Header.module.css';
 function Header() {
   return (
     <header className={styles['header']}>
-      <h1 className={styles['blog-name']}>Code & Craft</h1>
+      <Link to={'/'}>
+        <h1 className={styles['blog-name']}>Code & Craft</h1>
+      </Link>
 
       <nav>
         <ul className={styles['nav-list']}>
           <li>
             <Link to="/" className={styles['link']}>
-              Home
+              All Articles
             </Link>
           </li>
         </ul>
