@@ -9,7 +9,12 @@ function Home() {
   useEffect(() => {
     const getPosts = async () => {
       const response = await axios.get('http://localhost:3000/posts');
-      setPosts(response.data.data);
+      const data = response.data.data;
+      data.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setPosts(data);
     };
     getPosts();
   }, []);
