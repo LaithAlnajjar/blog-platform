@@ -46,7 +46,7 @@ function Post() {
       </div>
       <div>
         <h2>Comments</h2>
-        {auth.user && (
+        {(auth.user && (
           <div>
             <form
               action={`http://localhost:3000/posts/${id}/comments`}
@@ -57,7 +57,7 @@ function Post() {
               <button type="submit">Add Comment</button>
             </form>
           </div>
-        )}
+        )) || <div> Please login to add a comment</div>}
         {comments.map((comment) => (
           <div key={comment.id}>
             <h3>{comment.user.username}</h3>

@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import styles from './Header.module.css';
 
 function Header() {
+  const auth = useAuth();
+
   return (
     <header className={styles['header']}>
       <Link to={'/'}>
@@ -17,18 +20,27 @@ function Header() {
           </li>
         </ul>
       </nav>
-      <ul className={styles['auth-list']}>
-        <li>
-          <Link to="/login" className={styles['link']}>
-            Login
-          </Link>
-        </li>
-        <li>
-          <Link to="/register" className={styles['link']}>
-            Sign Up
-          </Link>
-        </li>
-      </ul>
+      {(auth.user && (
+        <ul>
+          <li>{auth.user.username}</li>
+          <li>
+            <button onClick={auth.logout}>Logout</button>
+          </li>
+        </ul>
+      )) || (
+        <ul className={styles['auth-list']}>
+          <li>
+            <Link to="/login" className={styles['link']}>
+              Login
+            </Link>
+          </li>
+          <li>
+            <Link to="/register" className={styles['link']}>
+              Sign Up
+            </Link>
+          </li>
+        </ul>
+      )}
     </header>
   );
 }

@@ -23,7 +23,6 @@ function Login() {
       e.preventDefault();
       const res = await auth.login(input);
       if (res) {
-        console.log('Login successful');
         navigate('/');
       } else {
         console.log('Login failed');
