@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PostCard from '../components/PostCard';
+import styles from '../../styles/Home.module.css';
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -19,11 +20,14 @@ function Home() {
     getPosts();
   }, []);
   return (
-    <div>
+    <div className={styles['container']}>
       {posts.map((post) => (
-        <Link to={`/posts/${post.id}`} key={post.id}>
-          <PostCard key={post.id} title={post.title} content={post.content} />
-        </Link>
+        <PostCard
+          key={post.id}
+          id={post.id}
+          title={post.title}
+          content={post.content}
+        />
       ))}
     </div>
   );
