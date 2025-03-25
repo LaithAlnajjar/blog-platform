@@ -21,20 +21,22 @@ function Header() {
         </ul>
 
         {(auth.user && (
-          <ul>
-            <li>{auth.user.username}</li>
-            <li>
-              <button onClick={auth.logout}>Logout</button>
+          <ul className={styles['signed-list']}>
+            <li className={styles['username']}>{auth.user.username}</li>
+            <li className={styles['logout-container']}>
+              <button className={styles['logout-btn']} onClick={auth.logout}>
+                Logout
+              </button>
             </li>
           </ul>
         )) || (
           <ul className={styles['auth-list']}>
-            <li>
+            <li className={styles['login']}>
               <Link to="/login" className={styles['link']}>
                 Login
               </Link>
             </li>
-            <li>
+            <li className={styles['register']}>
               <Link to="/register" className={styles['link']}>
                 Sign Up
               </Link>
