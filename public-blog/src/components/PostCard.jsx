@@ -5,7 +5,7 @@ function PostCard({ title, content, id }) {
     <div className={styles['card']}>
       <h2 className={styles['title']}>{title}</h2>
       <p className={styles['content']}>{content}</p>
-      <Link to={`/post/${id}`} className={styles['read-more']}>
+      <Link to={`/posts/${id}`} className={styles['read-more']}>
         Read More →
       </Link>
     </div>

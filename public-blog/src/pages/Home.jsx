@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PostCard from '../components/PostCard';
 import styles from '../../styles/Home.module.css';

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import styles from '../../styles/Post.module.css';
 
 function Post() {
   const { id } = useParams();
@@ -32,36 +33,50 @@ function Post() {
         },
       }
     );
-    console.log(response.data.data);
     if (response.data.success) {
+      e.target.content.value = '';
       setComments([...comments, response.data.data]);
     }
   };
 
   return (
-    <div>
+    <div className={styles['post']}>
       <div>
-        <h1>{post.title}</h1>
-        <p>{post.content}</p>
+        <h1 className={styles['title']}>{post.title}</h1>
+        <p className={styles['content']}>{post.content}</p>
       </div>
-      <div>
-        <h2>Comments</h2>
+      <div className={styles['comments']}>
+        <h2 className={styles['comments-title']}>Comments</h2>
         {(auth.user && (
-          <div>
+          <div className={styles['add-comment']}>
             <form
               action={`http://localhost:3000/posts/${id}/comments`}
               method="POST"
               onSubmit={handleSubmit}
+              className={styles['comment-form']}
             >
-              <input type="text" name="content" />
-              <button type="submit">Add Comment</button>
+              <input
+                type="text"
+                name="content"
+                className={styles['comment-input']}
+              />
+              <button type="submit" className={styles['comment-submit']}>
+                Add Comment
+              </button>
             </form>
           </div>
-        )) || <div> Please login to add a comment</div>}
+        )) || (
+          <div className={styles['please-login']}>
+            {' '}
+            Please login to add a comment
+          </div>
+        )}
         {comments.map((comment) => (
-          <div key={comment.id}>
-            <h3>{comment.user.username}</h3>
-            <p>{comment.content}</p>
+          <div key={comment.id} className={styles['comment']}>
+            <h3 className={styles['comment-username']}>
+              {comment.user.username}
+            </h3>
+            <p className={styles['comment-content']}>{comment.content}</p>
           </div>
         ))}
       </div>
