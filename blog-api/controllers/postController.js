@@ -60,7 +60,7 @@ const getAllPosts = async (req, res, next) => {
   try {
     const posts = await prisma.post.findMany();
     const publishedPosts = posts.filter((post) => post.published);
-    res.json({ success: true, data: posts });
+    res.json({ success: true, data: publishedPosts });
   } catch (error) {
     return next(error);
   }
