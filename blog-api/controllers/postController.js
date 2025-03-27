@@ -58,7 +58,8 @@ const verifyAdmin = async (req, res, next) => {
 
 const getAllPosts = async (req, res, next) => {
   try {
-    posts = await prisma.post.findMany();
+    const posts = await prisma.post.findMany();
+    const publishedPosts = posts.filter((post) => post.published);
     res.json({ success: true, data: posts });
   } catch (error) {
     return next(error);
