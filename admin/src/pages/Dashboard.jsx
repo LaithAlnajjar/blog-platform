@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import Post from '../components/Post';
 
 function Dashboard() {
   const [posts, setPosts] = useState([]);
@@ -29,30 +29,38 @@ function Dashboard() {
         }
       );
 
-      setPosts([
-        ...posts,
-        ...publishedData.data.data,
-        ...unpublishedData.data.data,
-      ]);
+      setPosts([...publishedData.data.data, ...unpublishedData.data.data]);
     };
 
     fetchPosts();
   }, [navigate, user]);
 
+  const handleDelete = async (post) => {
+    try {
+      await axios.delete(`http://localhost:3000/posts/${post.id}/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setPosts(posts.filter((p) => p.id !== post.id));
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+
   return (
     <div>
-      <h1> Admin Dashboard</h1>
+      <h1>Admin Dashboard</h1>
       <p>
         Welcome to the admin dashboard. Here you can manage your application.
       </p>
       <Link to="/new">New Post</Link>
 
-      {posts.map((post) => (
-        <li key={post.id}>
-          <Link to={`/edit/${post.id}`}>{post.title}</Link>
-          <button>Delete</button>
-        </li>
-      ))}
+      <ul>
+        {posts.map((post) => (
+          <Post key={post.id} post={post} onDelete={handleDelete} />
+        ))}
+      </ul>
     </div>
   );
 }
