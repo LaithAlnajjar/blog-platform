@@ -214,6 +214,7 @@ const deletePost = [
 module.exports = {
   createPost,
   getAllPosts,
+  getAllUnpublishedPosts,
   getPostById,
   updatePost,
   deletePost,
