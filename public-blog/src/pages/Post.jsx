@@ -3,10 +3,11 @@ import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import styles from '../../styles/Post.module.css';
+import parse from 'html-react-parser';
 
 function Post() {
   const { id } = useParams();
-  const [post, setPost] = useState({});
+  const [post, setPost] = useState({ title: '', content: '' });
   const [comments, setComments] = useState([]);
   const auth = useAuth();
 
@@ -43,7 +44,7 @@ function Post() {
     <div className={styles['post']}>
       <div>
         <h1 className={styles['title']}>{post.title}</h1>
-        <p className={styles['content']}>{post.content}</p>
+        <p className={styles['content']}>{parse(post.content)}</p>
       </div>
       <div className={styles['comments']}>
         <h2 className={styles['comments-title']}>Comments</h2>

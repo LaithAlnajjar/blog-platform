@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import PostCard from '../components/PostCard';
 import styles from '../../styles/Home.module.css';
+import parse from 'html-react-parser';
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -25,7 +26,7 @@ function Home() {
           key={post.id}
           id={post.id}
           title={post.title}
-          content={post.content}
+          content={parse(post.content)}
         />
       ))}
     </div>

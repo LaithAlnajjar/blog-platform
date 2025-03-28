@@ -13,7 +13,7 @@ function Header() {
 
       <div className={styles['bot-sec']}>
         <ul className={styles['nav-list']}>
-          <li>
+          <li className={styles['li']}>
             <Link to="/" className={styles['link']}>
               All Articles
             </Link>
@@ -22,8 +22,10 @@ function Header() {
 
         {(auth.user && (
           <ul className={styles['signed-list']}>
-            <li className={styles['username']}>{auth.user.username}</li>
-            <li className={styles['logout-container']}>
+            <li className={styles['username'] + ' ' + styles['li']}>
+              {auth.user.username}
+            </li>
+            <li className={styles['logout-container'] + ' ' + styles['li']}>
               <button className={styles['logout-btn']} onClick={auth.logout}>
                 Logout
               </button>
@@ -31,12 +33,12 @@ function Header() {
           </ul>
         )) || (
           <ul className={styles['auth-list']}>
-            <li className={styles['login']}>
+            <li className={styles['login'] + ' ' + styles['li']}>
               <Link to="/login" className={styles['link']}>
                 Login
               </Link>
             </li>
-            <li className={styles['register']}>
+            <li className={styles['register'] + ' ' + styles['li']}>
               <Link to="/register" className={styles['link']}>
                 Sign Up
               </Link>
