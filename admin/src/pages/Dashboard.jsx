@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import Post from '../components/Post';
+import { useAuth } from '../contexts/AuthContext';
 
 function Dashboard() {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
   const user = localStorage.getItem('user');
+  const auth = useAuth();
 
   useEffect(() => {
     if (!user) {
@@ -48,12 +50,20 @@ function Dashboard() {
     }
   };
 
+  const handleLogout = () => {
+    auth.logout();
+  };
+
   return (
     <div>
       <h1>Admin Dashboard</h1>
-      <p>
-        Welcome to the admin dashboard. Here you can manage your application.
-      </p>
+      <div>
+        <p>
+          Welcome to the admin dashboard. Here you can manage your application.
+        </p>
+        <button onClick={handleLogout}>logout</button>
+      </div>
+
       <Link to="/new">New Post</Link>
 
       <ul>
