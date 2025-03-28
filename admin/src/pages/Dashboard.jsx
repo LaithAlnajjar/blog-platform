@@ -45,6 +45,7 @@ function Dashboard() {
       <p>
         Welcome to the admin dashboard. Here you can manage your application.
       </p>
+      <Link to="/new">New Post</Link>
 
       {posts.map((post) => (
         <li key={post.id}>
