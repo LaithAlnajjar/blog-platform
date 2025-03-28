@@ -24,16 +24,18 @@ const AuthProvider = ({ children }) => {
         username,
         password,
       });
-      if (response.data.success) {
+      if (!response.data.success) {
         throw new Error(response.message);
       }
-      if (response.data.user.admin === false) {
+      console.log(response.data);
+      if (!response.data.data.user.role === 'ADMIN') {
         throw new Error('Unauthorized User');
       }
       setUser(response.data.data.user);
       setToken(response.data.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.data.user));
       localStorage.setItem('token', response.data.data.token);
+      return 'success';
     } catch (error) {
       console.error(error);
     }

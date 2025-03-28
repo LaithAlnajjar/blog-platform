@@ -1,10 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 function Login() {
-  const [input, setInput] = useState({ username: '', password: '' });
-  const [error, setError] = useState(null);
+  const [input, setInput] = useState({
+    username: '',
+    password: '',
+  });
   const navigate = useNavigate();
+  const auth = useAuth();
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    if (user && token) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const res = await auth.login(input);
+      if (res) {
+        navigate('/dashboard');
+      } else {
+        console.log('Login failed');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -13,8 +39,12 @@ function Login() {
   return (
     <div>
       <h1>Admin Login</h1>
-      <form>
-        <div style={{ marginBottom: '1rem' }}>
+      <form
+        action="http://localhost:3000/login"
+        method="POST"
+        onSubmit={handleSubmit}
+      >
+        <div>
           <label htmlFor="username">Username:</label>
           <input
             id="username"
@@ -25,7 +55,7 @@ function Login() {
             required
           />
         </div>
-        <div style={{ marginBottom: '1rem' }}>
+        <div>
           <label htmlFor="password">Password:</label>
           <input
             id="password"

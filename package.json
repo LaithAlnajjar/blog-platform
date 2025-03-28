@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"npm start --prefix blog-api\" \"npm run dev --prefix public-blog\""
+    "dev": "concurrently \"npm start --prefix blog-api\" \"npm run dev --prefix public-blog\" \"npm run dev --prefix admin\""
   },
   "keywords": [],
   "author": "",

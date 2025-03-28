@@ -56,6 +56,16 @@ const verifyAdmin = async (req, res, next) => {
   }
 };
 
+getAllUnpublishedPosts = async (req, res, next) => {
+  try {
+    const posts = await prisma.post.findMany();
+    const unpublishedPosts = posts.filter((post) => !post.published);
+    res.json({ success: true, data: unpublishedPosts });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const getAllPosts = async (req, res, next) => {
   try {
     const posts = await prisma.post.findMany();

@@ -4,6 +4,8 @@ const postController = require('../controllers/postController');
 
 postRouter.get('/', postController.getAllPosts);
 
+postgRouter.get('/unpublished', postController.getAllUnpublishedPosts);
+
 postRouter.post('/', postController.verifyToken, postController.createPost);
 
 postRouter.get('/:postId', postController.getPostById);
