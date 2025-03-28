@@ -158,6 +158,7 @@ const updatePost = [
         data: {
           title: req.body.title,
           content: req.body.content,
+          published: req.body.published,
           updatedAt: new Date(),
         },
       });
