@@ -168,3 +168,30 @@ PUT /posts/:postId/comments/:commentId
 ```http
 DELETE /posts/:postId/comments/:commentId
 ```
+
+---
+
+## 🚀 Deployment
+
+### **Live URLs**
+
+- **Public Blog:** [https://blog-platform-5yhg.vercel.app/](https://blog-platform-5yhg.vercel.app/)
+- **Admin Panel:** [https://blog-platform-admin-qx96xnaee-laithalnajjars-projects.vercel.app/](https://blog-platform-admin-qx96xnaee-laithalnajjars-projects.vercel.app/)
+
+### **Backend Deployment (Railway)**
+
+1. Push the backend code to GitHub.
+2. Sign in to [Railway](https://railway.app/) and create a new project.
+3. Link your GitHub repository.
+4. Set environment variables (`DATABASE_URL`, `SECRET`, `JWT_SECRET`).
+5. Deploy the project.
+
+### **Frontend Deployment (Vercel)**
+
+1. Push both the **public blog** and **admin panel** code to GitHub.
+2. Sign in to [Vercel](https://vercel.com/) and create two projects:
+   - One for `public-blog`
+   - One for `admin`
+3. Link the repositories and deploy.
+4. Set environment variables in Vercel (`VITE_API_URL` for API connection).
+5. Deploy and test.
