@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Editor } from '@tinymce/tinymce-react';
+import styles from '../styles/NewPost.module.css';
 
 const API_URL = 'https://blog-api-production-b6da.up.railway.app/posts';
 
@@ -54,28 +55,37 @@ function NewPost() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className={styles['form-container']}>
       <h2>Create Post</h2>
-      {error && <p>{error}</p>}
-      <input
-        type="text"
-        name="title"
-        placeholder="Title"
-        value={post.title}
-        onChange={handleChange}
-        required
-        disabled={isLoading}
-      />
-      <Editor
-        apiKey={apiKey}
-        onEditorChange={handleEditorChange}
-        disabled={isLoading}
-        init={{ height: 500 }}
-      />
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? 'Saving...' : 'Save'}
-      </button>
-    </form>
+      {error && <div className={styles.error}>{error}</div>}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="title"
+          placeholder="Title"
+          value={post.title}
+          onChange={handleChange}
+          required
+          disabled={isLoading}
+        />
+        <Editor
+          apiKey={apiKey}
+          value={post.content}
+          onEditorChange={handleEditorChange}
+          disabled={isLoading}
+          init={{
+            height: 500,
+            menubar: false,
+            plugins: 'lists link image preview',
+            toolbar:
+              'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image',
+          }}
+        />
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Saving...' : 'Save'}
+        </button>
+      </form>
+    </div>
   );
 }
 
