@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 
 const API_URL = 'https://blog-api-production-b6da.up.railway.app/posts';
 

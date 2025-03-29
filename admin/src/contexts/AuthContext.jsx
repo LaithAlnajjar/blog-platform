@@ -1,43 +1,62 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = 'https://blog-api-production-b6da.up.railway.app';
 const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-
-  const storedUser = localStorage.getItem('user');
-  const storedToken = localStorage.getItem('token');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setToken(storedToken);
-    }
-  }, [storedUser, storedToken]);
+    const storedUser = localStorage.getItem('user');
+    const storedToken = localStorage.getItem('token');
 
-  const login = async (data) => {
+    if (storedUser && storedToken) {
+      try {
+        setUser(JSON.parse(storedUser));
+        setToken(storedToken);
+      } catch (error) {
+        console.error('Error parsing stored user:', error);
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+      }
+    }
+  }, []);
+
+  const login = async (credentials) => {
+    setIsLoading(true);
+    setError(null);
+
     try {
-      const { username, password } = data;
-      const response = await axios.post('http://localhost:3000/login', {
+      const { username, password } = credentials;
+      const response = await axios.post(`${API_URL}/login`, {
         username,
         password,
       });
-      if (!response.data.success) {
-        throw new Error(response.message);
+
+      const { data } = response.data;
+
+      if (!data?.user?.role || data.user.role !== 'ADMIN') {
+        throw new Error('Unauthorized: Admin access required');
       }
-      console.log(response.data);
-      if (!response.data.data.user.role === 'ADMIN') {
-        throw new Error('Unauthorized User');
-      }
-      setUser(response.data.data.user);
-      setToken(response.data.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.data.user));
-      localStorage.setItem('token', response.data.data.token);
-      return 'success';
+
+      setUser(data.user);
+      setToken(data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
+
+      return true;
     } catch (error) {
-      console.error(error);
+      const errorMessage =
+        error.response?.data?.message || error.message || 'Login failed';
+      setError(errorMessage);
+      console.error('Login error:', errorMessage);
+      return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -48,15 +67,24 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
   };
 
-  return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = {
+    user,
+    token,
+    login,
+    logout,
+    isLoading,
+    error,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };

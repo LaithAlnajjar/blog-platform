@@ -7,6 +7,8 @@ function Login() {
     username: '',
     password: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const auth = useAuth();
 
@@ -19,16 +21,26 @@ function Login() {
   }, [navigate]);
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
     try {
-      e.preventDefault();
+      if (!input.username || !input.password) {
+        throw new Error('Please fill in all fields');
+      }
+
       const res = await auth.login(input);
       if (res) {
         navigate('/dashboard');
       } else {
-        console.log('Login failed');
+        setError('Invalid username or password');
       }
     } catch (error) {
-      console.error(error);
+      setError(error.message || 'Login failed. Please try again.');
+      console.error('Login error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -39,11 +51,8 @@ function Login() {
   return (
     <div>
       <h1>Admin Login</h1>
-      <form
-        action="http://localhost:3000/login"
-        method="POST"
-        onSubmit={handleSubmit}
-      >
+      {error && <p>{error}</p>}
+      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username">Username:</label>
           <input
@@ -53,6 +62,7 @@ function Login() {
             value={input.username}
             onChange={handleChange}
             required
+            disabled={isLoading}
           />
         </div>
         <div>
@@ -64,9 +74,12 @@ function Login() {
             value={input.password}
             onChange={handleChange}
             required
+            disabled={isLoading}
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Logging in...' : 'Login'}
+        </button>
       </form>
     </div>
   );

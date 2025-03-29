@@ -4,8 +4,12 @@ import axios from 'axios';
 import Post from '../components/Post';
 import { useAuth } from '../contexts/AuthContext';
 
+const API_URL = 'https://blog-api-production-b6da.up.railway.app/posts';
+
 function Dashboard() {
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const user = localStorage.getItem('user');
   const auth = useAuth();
@@ -13,25 +17,34 @@ function Dashboard() {
   useEffect(() => {
     if (!user) {
       navigate('/login');
+      return;
     }
 
     const fetchPosts = async () => {
-      const publishedData = await axios.get('http://localhost:3000/posts', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+      setIsLoading(true);
+      setError(null);
 
-      const unpublishedData = await axios.get(
-        'http://localhost:3000/posts/unpublished',
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      try {
+        const [publishedData, unpublishedData] = await Promise.all([
+          axios.get(`${API_URL}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }),
+          axios.get(`${API_URL}/unpublished`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }),
+        ]);
 
-      setPosts([...publishedData.data.data, ...unpublishedData.data.data]);
+        setPosts([...publishedData.data.data, ...unpublishedData.data.data]);
+      } catch (error) {
+        setError('Failed to fetch posts. Please try again later.');
+        console.error('Error fetching posts:', error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchPosts();
@@ -39,7 +52,7 @@ function Dashboard() {
 
   const handleDelete = async (post) => {
     try {
-      await axios.delete(`http://localhost:3000/posts/${post.id}/`, {
+      await axios.delete(`${API_URL}/${post.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -47,30 +60,32 @@ function Dashboard() {
       setPosts(posts.filter((p) => p.id !== post.id));
     } catch (error) {
       console.error('Error deleting post:', error);
+      throw error;
     }
-  };
-
-  const handleLogout = () => {
-    auth.logout();
   };
 
   return (
     <div>
-      <h1>Admin Dashboard</h1>
-      <div>
-        <p>
-          Welcome to the admin dashboard. Here you can manage your application.
-        </p>
-        <button onClick={handleLogout}>logout</button>
-      </div>
+      <header>
+        <h1>Admin Dashboard</h1>
+        <div>
+          <Link to="/new">New Post</Link>
+          <button onClick={auth.logout}>Logout</button>
+        </div>
+      </header>
 
-      <Link to="/new">New Post</Link>
+      {error && <p>{error}</p>}
 
-      <ul>
-        {posts.map((post) => (
-          <Post key={post.id} post={post} onDelete={handleDelete} />
-        ))}
-      </ul>
+      {isLoading ? (
+        <p>Loading posts...</p>
+      ) : (
+        <ul>
+          {posts.map((post) => (
+            <Post key={post.id} post={post} onDelete={handleDelete} />
+          ))}
+          {posts.length === 0 && !error && <p>No posts found.</p>}
+        </ul>
+      )}
     </div>
   );
 }
