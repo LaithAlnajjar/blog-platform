@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import styles from '../styles/Post.module.css';
 
 const API_URL = 'https://blog-api-production-b6da.up.railway.app/posts';
 
@@ -49,17 +50,28 @@ function Post({ post: initialPost, onDelete }) {
   };
 
   return (
-    <li className="post-item">
-      <Link to={`/edit/${post.id}`}>{post.title}</Link>
-      {error && <p>{error}</p>}
-      <div>
+    <li className={styles['post-item']}>
+      <Link to={`/edit/${post.id}`} className={styles['post-title']}>
+        {post.title}
+      </Link>
+      {error && <p className={styles['error']}>{error}</p>}
+      <div className={styles['actions']}>
         <button
           onClick={() => handlePublishToggle(!post.published)}
           disabled={isLoading}
+          className={`${styles['button']} ${
+            post.published
+              ? styles['button-unpublish']
+              : styles['button-publish']
+          }`}
         >
           {isLoading ? 'Updating...' : post.published ? 'Unpublish' : 'Publish'}
         </button>
-        <button onClick={handleDelete} disabled={isLoading}>
+        <button
+          onClick={handleDelete}
+          disabled={isLoading}
+          className={`${styles['button']} ${styles['button-delete']}`}
+        >
           {isLoading ? 'Deleting...' : 'Delete'}
         </button>
       </div>
