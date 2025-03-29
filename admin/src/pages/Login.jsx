@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import styles from '../styles/Login.module.css';
 
 function Login() {
-  const [input, setInput] = useState({
-    username: '',
-    password: '',
-  });
+  const [input, setInput] = useState({ username: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const auth = useAuth();
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    if (user && token) {
+    if (localStorage.getItem('user') && localStorage.getItem('token')) {
       navigate('/dashboard');
     }
   }, [navigate]);
@@ -25,11 +21,13 @@ function Login() {
     setIsLoading(true);
     setError(null);
 
-    try {
-      if (!input.username || !input.password) {
-        throw new Error('Please fill in all fields');
-      }
+    if (!input.username || !input.password) {
+      setError('Please fill in all fields');
+      setIsLoading(false);
+      return;
+    }
 
+    try {
       const res = await auth.login(input);
       if (res) {
         navigate('/dashboard');
@@ -49,11 +47,15 @@ function Login() {
   };
 
   return (
-    <div>
+    <div className={styles['login-container']}>
       <h1>Admin Login</h1>
-      {error && <p>{error}</p>}
+      {error && (
+        <div className={styles.error} aria-live="polite">
+          {error}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className={styles['form-group']}>
           <label htmlFor="username">Username:</label>
           <input
             id="username"
@@ -65,7 +67,7 @@ function Login() {
             disabled={isLoading}
           />
         </div>
-        <div>
+        <div className={styles['form-group']}>
           <label htmlFor="password">Password:</label>
           <input
             id="password"
