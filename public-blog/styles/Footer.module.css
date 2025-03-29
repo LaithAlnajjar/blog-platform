@@ -1,0 +1,30 @@
+.footer {
+  background-color: var(--secondary-background);
+  padding: 20px 0;
+  text-align: center;
+  border-top: 3px solid var(--accent);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.text,
+.credit {
+  font-size: 1rem;
+  color: var(--primary-text);
+  margin: 5px 0;
+}
+
+.link {
+  color: var(--secondary-text);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: var(--accent);
+}
