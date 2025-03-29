@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import Post from '../components/Post';
 import { useAuth } from '../contexts/AuthContext';
+import styles from '../styles/Dashboard.module.css';
 
 const API_URL = 'https://blog-api-production-b6da.up.railway.app/posts';
 
@@ -65,25 +66,37 @@ function Dashboard() {
   };
 
   return (
-    <div>
-      <header>
-        <h1>Admin Dashboard</h1>
-        <div>
-          <Link to="/new">New Post</Link>
-          <button onClick={auth.logout}>Logout</button>
+    <div className={styles['container']}>
+      <header className={styles['header']}>
+        <h1 className={styles['title']}>Admin Dashboard</h1>
+        <div className={styles['actions']}>
+          <Link
+            to="/new"
+            className={`${styles['button']} ${styles['button-primary']}`}
+          >
+            New Post
+          </Link>
+          <button
+            onClick={auth.logout}
+            className={`${styles['button']} ${styles['button-danger']}`}
+          >
+            Logout
+          </button>
         </div>
       </header>
 
-      {error && <p>{error}</p>}
+      {error && <p className={styles['error']}>{error}</p>}
 
       {isLoading ? (
-        <p>Loading posts...</p>
+        <p className={styles['loading']}>Loading posts...</p>
       ) : (
-        <ul>
+        <ul className={styles['posts-list']}>
           {posts.map((post) => (
             <Post key={post.id} post={post} onDelete={handleDelete} />
           ))}
-          {posts.length === 0 && !error && <p>No posts found.</p>}
+          {posts.length === 0 && !error && (
+            <p className={styles['no-posts']}>No posts found.</p>
+          )}
         </ul>
       )}
     </div>
