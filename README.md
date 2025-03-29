@@ -175,7 +175,7 @@ DELETE /posts/:postId/comments/:commentId
 
 ### **Live URLs**
 
-- **Public Blog:** [https://codeandcraftblog.vercel.app/](codeandcraftblog.vercel.app)
+- **Public Blog:** [https://codeandcraftblog.vercel.app/](https://codeandcraftblog.vercel.app/)
 - **Admin Panel:** [https://blog-platform-admin-qx96xnaee-laithalnajjars-projects.vercel.app/](https://blog-platform-admin-qx96xnaee-laithalnajjars-projects.vercel.app/)
 
 ### **Backend Deployment (Railway)**
