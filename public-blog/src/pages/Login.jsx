@@ -8,6 +8,8 @@ function Login() {
     username: '',
     password: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const auth = useAuth();
 
@@ -16,38 +18,49 @@ function Login() {
       ...input,
       [e.target.name]: e.target.value,
     });
+    setError(null);
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    if (!input.username || !input.password) {
+      setError('Username and password are required');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      e.preventDefault();
       const res = await auth.login(input);
       if (res) {
         navigate('/');
       } else {
-        console.log('Login failed');
+        setError('Invalid username or password');
       }
     } catch (error) {
-      console.error(error);
+      setError(error.message || 'An error occurred during login');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <form
-      action="http://localhost:3000/login"
-      method="POST"
-      onSubmit={handleSubmit}
-      className={styles['form']}
-    >
+    <form onSubmit={handleSubmit} className={styles['form']}>
       <h2 className={styles['title']}>Login</h2>
+      {error && <div className={styles['error']}>{error}</div>}
       <label htmlFor="username" className={styles['label']}>
         Username
         <input
           type="text"
           id="username"
           name="username"
+          min={3}
           onChange={handleChange}
           className={styles['input']}
+          disabled={isLoading}
+          required
         />
       </label>
       <label htmlFor="password" className={styles['label']}>
@@ -56,12 +69,15 @@ function Login() {
           type="password"
           id="password"
           name="password"
+          min={3}
           onChange={handleChange}
           className={styles['input']}
+          disabled={isLoading}
+          required
         />
       </label>
-      <button type="submit" className={styles['btn']}>
-        Login
+      <button type="submit" className={styles['btn']} disabled={isLoading}>
+        {isLoading ? 'Logging in...' : 'Login'}
       </button>
     </form>
   );

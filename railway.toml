@@ -1,0 +1,3 @@
+[service]
+build = "cd blog-api && npm install && npm run build"
+start = "cd blog-api && npm start"

@@ -54,3 +54,9 @@
 .btn:hover {
   background: #0056b3;
 }
+
+.error {
+  color: #dc3545;
+  margin-bottom: 1rem;
+  text-align: center;
+}

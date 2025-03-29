@@ -8,6 +8,8 @@ function Register() {
     username: '',
     password: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const auth = useAuth();
 
@@ -16,25 +18,38 @@ function Register() {
       ...input,
       [e.target.name]: e.target.value,
     });
+    setError(null);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    if (!input.username || !input.password) {
+      setError('Username and password are required');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      e.preventDefault();
-      auth.register(input);
-      navigate('/login');
+      const success = await auth.register(input);
+      if (success) {
+        navigate('/login');
+      } else {
+        setError('Registration failed. Please try again.');
+      }
     } catch (error) {
-      console.error(error);
+      setError(error.message || 'An error occurred during registration');
+    } finally {
+      setIsLoading(false);
     }
   };
+
   return (
-    <form
-      action="http://localhost:3000/register"
-      method="POST"
-      onSubmit={handleSubmit}
-      className={styles['form']}
-    >
+    <form onSubmit={handleSubmit} className={styles['form']}>
       <h2 className={styles['title']}>Register</h2>
+      {error && <div className={styles['error']}>{error}</div>}
       <label htmlFor="username" className={styles['label']}>
         Username
         <input
@@ -43,6 +58,9 @@ function Register() {
           name="username"
           onChange={handleChange}
           className={styles['input']}
+          disabled={isLoading}
+          required
+          minLength={3}
         />
       </label>
       <label htmlFor="password" className={styles['label']}>
@@ -53,10 +71,13 @@ function Register() {
           name="password"
           onChange={handleChange}
           className={styles['input']}
+          disabled={isLoading}
+          required
+          minLength={8}
         />
       </label>
-      <button type="submit" className={styles['btn']}>
-        Register
+      <button type="submit" className={styles['btn']} disabled={isLoading}>
+        {isLoading ? 'Registering...' : 'Register'}
       </button>
     </form>
   );

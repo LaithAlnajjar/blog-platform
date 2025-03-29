@@ -11,7 +11,12 @@
   font-size: 2.2rem;
   font-weight: bold;
   color: var(--primary-text, #222);
-  margin-bottom: 1rem;
+  margin-bottom: 5px;
+}
+
+.date {
+  color: var(--secondary-text, #666);
+  font-size: 0.9rem;
 }
 
 .content {
@@ -93,4 +98,15 @@
   font-size: 1rem;
   color: var(--primary-text, #444);
   line-height: 1.6;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #dc3545;
 }
